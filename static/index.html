@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Rating System - FIFA Style</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🎓</span>
+                    <h1>Student Rating System</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-secondary" onclick="showPerformance()">
+                        📊 Model Performance
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h2 class="hero-title">FIFA-Style Student Performance Analysis</h2>
+                <p class="hero-subtitle">AI-powered insights for personalized student improvement</p>
+            </section>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('manual')">
+                    ✍️ Manual Entry
+                </button>
+                <button class="tab" onclick="switchTab('csv')">
+                    📁 CSV Upload
+                </button>
+            </div>
+
+            <!-- Manual Entry Form -->
+            <div id="manual-tab" class="tab-content active">
+                <div class="card">
+                    <h3 class="card-title">Student Information</h3>
+                    <form id="student-form" onsubmit="analyzeStudent(event)">
+                        <div class="form-group">
+                            <label for="student_id">Student ID / Name</label>
+                            <input type="text" id="student_id" required placeholder="e.g., STU001 or John Smith">
+                        </div>
+
+                        <div class="form-section">
+                            <h4>Performance Metrics (0-100%)</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="attendance">Attendance</label>
+                                    <input type="number" id="attendance" min="0" max="100" value="80" step="0.1" required>
+                                    <div class="input-help">Class presence & punctuality</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="class_focus">Class Focus</label>
+                                    <input type="number" id="class_focus" min="0" max="100" value="70" step="0.1" required>
+                                    <div class="input-help">Engagement & concentration</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exam">Exam Score</label>
+                                    <input type="number" id="exam" min="0" max="100" value="65" step="0.1" required>
+                                    <div class="input-help">Test performance</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>Assignments (1-10 scale)</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="homework">Homework Quality</label>
+                                    <input type="number" id="homework" min="1" max="10" value="7" step="0.1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="classwork">Classwork Quality</label>
+                                    <input type="number" id="classwork" min="1" max="10" value="7" step="0.1" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>Skills (1-10 scale)</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="problem_solving">Problem Solving</label>
+                                    <input type="number" id="problem_solving" min="1" max="10" value="7" step="0.1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="communication">Communication</label>
+                                    <input type="number" id="communication" min="1" max="10" value="7" step="0.1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="discipline">Discipline</label>
+                                    <input type="number" id="discipline" min="1" max="10" value="7" step="0.1" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary btn-large">
+                            Analyze Student
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- CSV Upload Tab -->
+            <div id="csv-tab" class="tab-content">
+                <div class="card">
+                    <h3 class="card-title">Upload CSV File</h3>
+                    <p class="card-subtitle">Upload a CSV file containing multiple students</p>
+                    
+                    <div class="upload-area" onclick="document.getElementById('csv-file').click()">
+                        <div class="upload-icon">📁</div>
+                        <p>Click to select CSV file or drag and drop</p>
+                        <input type="file" id="csv-file" accept=".csv" onchange="handleCSVUpload(event)" style="display: none;">
+                    </div>
+
+                    <div class="csv-info">
+                        <h4>Expected CSV Format:</h4>
+                        <code>student_id,attendance,homework,classwork,class_focus,exam,problem_solving,communication,discipline</code>
+                        <button class="btn-secondary btn-small" onclick="downloadSampleCSV()">
+                            Download Sample CSV
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results" class="results" style="display: none;">
+                <div class="card results-card">
+                    <div class="results-header">
+                        <h3>Analysis Results</h3>
+                        <button class="btn-close" onclick="closeResults()">✕</button>
+                    </div>
+
+                    <!-- Overall Rating -->
+                    <div class="rating-display">
+                        <div class="rating-number" id="overall-rating">--</div>
+                        <div class="rating-tier" id="rating-tier">--</div>
+                        <div class="student-name" id="result-student-id">--</div>
+                    </div>
+
+                    <!-- Category Breakdown -->
+                    <div class="category-breakdown">
+                        <h4>Category Breakdown</h4>
+                        <div id="category-bars"></div>
+                    </div>
+
+                    <!-- Weak Area & Recommendation -->
+                    <div class="recommendation-section">
+                        <div class="weak-area">
+                            <h4>⚠️ Focus Area</h4>
+                            <p id="weak-category">--</p>
+                        </div>
+                        <div class="recommendation">
+                            <h4>💡 Recommendation</h4>
+                            <p id="recommendation-text">--</p>
+                        </div>
+                    </div>
+
+                    <!-- AI Suggestions -->
+                    <div id="ai-section" class="ai-suggestions" style="display: none;">
+                        <h4>🤖 AI-Powered Improvement Plan</h4>
+                        <div id="ai-content" class="ai-content"></div>
+                    </div>
+
+                    <!-- Feedback Section -->
+                    <div class="feedback-section">
+                        <h4>Help Improve the Model</h4>
+                        <p>Provide feedback to help the model learn</p>
+                        <div class="feedback-form">
+                            <input type="number" id="actual-rating" placeholder="Actual rating (0-100)" min="0" max="100" step="0.1">
+                            <button class="btn-primary" onclick="submitFeedback()">Submit Feedback</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loading" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+        <p>Analyzing student...</p>
+    </div>
+
+    <!-- Performance Modal -->
+    <div id="performance-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Model Performance</h3>
+                <button class="btn-close" onclick="closePerformance()">✕</button>
+            </div>
+            <div id="performance-content" class="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Student Rating System | Powered by AI & Adaptive Learning</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

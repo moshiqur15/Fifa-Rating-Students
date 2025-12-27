@@ -1,0 +1,245 @@
+═══════════════════════════════════════════════════════════════════════
+   STUDENT RATING SYSTEM - ARCHITECTURE WITH CSV REPORT CARD ANALYSIS
+═══════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────┐
+│                            USER INTERFACES                          │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┏━━━━━━━━━━━━━━━━━┓  ┏━━━━━━━━━━━━━━━━━┓  ┏━━━━━━━━━━━━━━━━━┓   │
+│  ┃   app.py        ┃  ┃ demo_report_    ┃  ┃  Programmatic   ┃   │
+│  ┃   Interactive   ┃  ┃ card.py Demo    ┃  ┃  Python API     ┃   │
+│  ┃   Menu System   ┃  ┃ Script          ┃  ┃  Integration    ┃   │
+│  ┗━━━━━━━━━━━━━━━━━┛  ┗━━━━━━━━━━━━━━━━━┛  ┗━━━━━━━━━━━━━━━━━┛   │
+│          │                    │                     │               │
+└──────────┼────────────────────┼─────────────────────┼───────────────┘
+           │                    │                     │
+           └────────────────────┴─────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                         INPUT LAYER                                 │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┌──────────────────┐     ┌──────────────────┐                    │
+│  │ Manual Input     │     │ CSV Report Card  │                    │
+│  │ (Interactive)    │     │ (Daily Records)  │                    │
+│  └────────┬─────────┘     └────────┬─────────┘                    │
+│           │                        │                               │
+│           │  ┌─────────────────────┘                               │
+│           │  │  • date, attendance, HW_issue, CW_issue            │
+│           │  │  • daily_exam1_mark, daily_exam2_mark              │
+│           │  │  • teacher_comment (for AI analysis)               │
+│           │  │                                                     │
+└───────────┼──┼─────────────────────────────────────────────────────┘
+            │  │
+            │  ▼
+            │  ┌──────────────────────────────────────────┐
+            │  │   src/csv_processor.py                   │
+            │  │   CSVReportProcessor                     │
+            │  │                                          │
+            │  │  ┌────────────────────────────────────┐ │
+            │  │  │ Core Processing:                   │ │
+            │  │  │ • compute_attendance()             │ │
+            │  │  │ • compute_hw_cw_score()            │ │
+            │  │  │ • compute_exam_score()             │ │
+            │  │  │ • compute_class_focus()            │ │
+            │  │  └────────────────────────────────────┘ │
+            │  │                │                         │
+            │  │                ▼                         │
+            │  │  ┌────────────────────────────────────┐ │
+            │  │  │ AI Comment Analysis:               │ │
+            │  │  │ • analyze_comments_with_groq()     │ │
+            │  │  │   - Problem Solving               │ │
+            │  │  │   - Communication                 │ │
+            │  │  │   - Discipline                    │ │
+            │  │  │                                    │ │
+            │  │  │ Fallback:                          │ │
+            │  │  │ • infer_skills_from_keywords()     │ │
+            │  │  └────────────────────────────────────┘ │
+            │  └──────────────────┬───────────────────────┘
+            │                     │
+            │                     │ Outputs:
+            │                     │ {student_id, attendance, homework,
+            │                     │  classwork, class_focus, exam, skills}
+            │                     │
+            └─────────────────────┴─────────────────────┐
+                                  │                     │
+                                  ▼                     │
+┌─────────────────────────────────────────────────────────────────────┐
+│                      RATING ENGINE                                  │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  │
+│  ┃  src/student_rating.py                                       ┃  │
+│  ┃  StudentRatingModel                                          ┃  │
+│  ┃                                                              ┃  │
+│  ┃  ┌────────────────────────────────────────────────────────┐ ┃  │
+│  ┃  │ compute_student_ratings()                              │ ┃  │
+│  ┃  │                                                        │ ┃  │
+│  ┃  │  Weights (Adaptive):                                  │ ┃  │
+│  ┃  │  • Attendance:    20%                                 │ ┃  │
+│  ┃  │  • Homework:      15%                                 │ ┃  │
+│  ┃  │  • Classwork:     10%                                 │ ┃  │
+│  ┃  │  • Class Focus:   15%                                 │ ┃  │
+│  ┃  │  • Exam:          25%                                 │ ┃  │
+│  ┃  │  • Skills:        15%                                 │ ┃  │
+│  ┃  │                                                        │ ┃  │
+│  ┃  │  Normalization: Maps all inputs to 1-100 scale       │ ┃  │
+│  ┃  └────────────────────────────────────────────────────────┘ ┃  │
+│  ┃                          │                                    ┃  │
+│  ┃                          ▼                                    ┃  │
+│  ┃  ┌────────────────────────────────────────────────────────┐ ┃  │
+│  ┃  │ recommend_improvement()                                │ ┃  │
+│  ┃  │                                                        │ ┃  │
+│  ┃  │  • Identifies weakest category                        │ ┃  │
+│  ┃  │  • Generates basic recommendation                     │ ┃  │
+│  ┃  │  • Returns category scores                            │ ┃  │
+│  ┃  └────────────────────────────────────────────────────────┘ ┃  │
+│  ┃                          │                                    ┃  │
+│  ┃                          ▼                                    ┃  │
+│  ┃  ┌────────────────────────────────────────────────────────┐ ┃  │
+│  ┃  │ adapt_weights() - Adaptive Learning                    │ ┃  │
+│  ┃  │  • Adjusts based on feedback                          │ ┃  │
+│  ┃  │  • Improves accuracy over time                        │ ┃  │
+│  ┃  └────────────────────────────────────────────────────────┘ ┃  │
+│  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  │
+│                               │                                    │
+└───────────────────────────────┼────────────────────────────────────┘
+                                │
+                                │ Outputs:
+                                │ {overall_rating, subcategories,
+                                │  weak_category, recommendation}
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                      AI ENHANCEMENT LAYER                           │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓  │
+│  ┃  src/groq_client.py                                          ┃  │
+│  ┃  GroqSuggestionGenerator                                     ┃  │
+│  ┃                                                              ┃  │
+│  ┃  Uses: Groq API (llama-3.3-70b-versatile)                   ┃  │
+│  ┃                                                              ┃  │
+│  ┃  ┌────────────────────────────────────────────────────────┐ ┃  │
+│  ┃  │ generate_improvement_plan()                            │ ┃  │
+│  ┃  │  • Detailed step-by-step action plan                  │ ┃  │
+│  ┃  │  • Specific strategies for weak areas                 │ ┃  │
+│  ┃  │  • Timeline and milestones                            │ ┃  │
+│  ┃  └────────────────────────────────────────────────────────┘ ┃  │
+│  ┃                                                              ┃  │
+│  ┃  ┌────────────────────────────────────────────────────────┐ ┃  │
+│  ┃  │ generate_strengths_analysis()                          │ ┃  │
+│  ┃  │  • Identifies and highlights strengths                │ ┃  │
+│  ┃  │  • Suggests how to leverage them                      │ ┃  │
+│  ┃  └────────────────────────────────────────────────────────┘ ┃  │
+│  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛  │
+│                               │                                    │
+└───────────────────────────────┼────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                         OUTPUT LAYER                                │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┌──────────────────────┐  ┌──────────────────────┐               │
+│  │   Console Display    │  │   File Storage       │               │
+│  ├──────────────────────┤  ├──────────────────────┤               │
+│  │ • Overall Rating     │  │ logs/                │               │
+│  │ • Performance Tier   │  │  ├─ analysis_*.json  │               │
+│  │ • Category Breakdown │  │  ├─ ai_suggestions_  │               │
+│  │ • Visual Bar Charts  │  │  │    *.txt           │               │
+│  │ • Weak Areas (⚠)     │  │  └─ model.pkl        │               │
+│  │ • Recommendations    │  │                      │               │
+│  │ • AI Improvement     │  │ Saved Data:          │               │
+│  │   Plans              │  │ • Full metrics       │               │
+│  │ • Strengths Analysis │  │ • Ratings history    │               │
+│  └──────────────────────┘  │ • AI suggestions     │               │
+│                            │ • Model state        │               │
+│                            └──────────────────────┘               │
+└─────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════
+                          DATA MODELS
+═══════════════════════════════════════════════════════════════════════
+
+INPUT (CSV Report Card):
+┌─────────────────────────────────────────────────────────────────┐
+│ date | attendance | HW_issue | CW_issue | daily_exam1_mark |   │
+│      |            |          |          | daily_exam2_mark |   │
+│      |            |          |          | teacher_comment  |   │
+└─────────────────────────────────────────────────────────────────┘
+
+PROCESSED STUDENT DATA:
+┌─────────────────────────────────────────────────────────────────┐
+│ {                                                               │
+│   "student_id": "Amin",                                         │
+│   "attendance": 100.0,        # percentage                      │
+│   "homework": 10,             # 1-10 scale                      │
+│   "classwork": 10,            # 1-10 scale                      │
+│   "class_focus": 89.1,        # percentage (weighted)           │
+│   "exam": 75.9,               # percentage                      │
+│   "skills": {                                                   │
+│     "problem_solving": 8,    # 1-10 scale                       │
+│     "communication": 6,      # 1-10 scale                       │
+│     "discipline": 9          # 1-10 scale                       │
+│   }                                                             │
+│ }                                                               │
+└─────────────────────────────────────────────────────────────────┘
+
+RATING OUTPUT:
+┌─────────────────────────────────────────────────────────────────┐
+│ {                                                               │
+│   "overall_rating": 88.57,                                      │
+│   "subcategories": {                                            │
+│     "Attendance": 100.0,                                        │
+│     "Homework": 100.0,                                          │
+│     "Classwork": 100.0,                                         │
+│     "Class Focus": 89.2,                                        │
+│     "Exam": 76.1,                                               │
+│     "Skills": {                                                 │
+│       "problem_solving": 80.0,                                  │
+│       "communication": 60.0,                                    │
+│       "discipline": 90.0                                        │
+│     }                                                           │
+│   },                                                            │
+│   "weak_category": "Skills",                                    │
+│   "recommendation": "Enhance key skills through practice..."    │
+│ }                                                               │
+└─────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════
+                        EXTERNAL DEPENDENCIES
+═══════════════════════════════════════════════════════════════════════
+
+┌──────────────────────┐
+│   Groq API           │  Used for:
+│   (Optional)         │  • Teacher comment analysis
+│                      │  • Skill extraction
+│   Environment Var:   │  • Improvement suggestions
+│   GROQ_API_KEY       │  • Strengths analysis
+└──────────────────────┘
+         │
+         │ Fallback: Keyword-based analysis
+         │ (No API required for basic features)
+         ▼
+   System works without API!
+
+═══════════════════════════════════════════════════════════════════════
+                          KEY FEATURES
+═══════════════════════════════════════════════════════════════════════
+
+✓ Multi-source Input (Manual, CSV Report Cards, Pre-processed CSV)
+✓ Automatic Metric Calculation from Daily Records
+✓ AI-Powered Teacher Comment Analysis (with fallback)
+✓ FIFA-Style Rating System (1-100 scale)
+✓ Adaptive Learning (Model improves with feedback)
+✓ Weakness Identification & Recommendations
+✓ AI-Generated Improvement Plans
+✓ Comprehensive Logging & Data Persistence
+✓ Interactive & Programmatic Interfaces
+✓ Batch Processing Support
+✓ Complete Documentation & Examples
+
+═══════════════════════════════════════════════════════════════════════

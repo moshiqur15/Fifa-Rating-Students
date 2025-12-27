@@ -1,0 +1,30 @@
+{
+  "student_id": "Moshiqur Rahman",
+  "timestamp": "2025-12-01T02:04:13.987076",
+  "ratings": {
+    "overall_rating": 69.83,
+    "subcategories": {
+      "Attendance": 99.01,
+      "Homework": 100.0,
+      "Classwork": 100.0,
+      "Class Focus": 100.0,
+      "Exam": 10.9,
+      "Skills": {
+        "problem_solving": 56.0,
+        "communication": 78.0,
+        "discipline": 12.0
+      }
+    },
+    "timestamp": "2025-12-01T02:04:09.960054",
+    "student_id": "Moshiqur Rahman"
+  },
+  "weak_category": "Exam",
+  "recommendation": "Practice exam strategy, time management, and answer organization.",
+  "all_scores": {
+    "Attendance": 99.01,
+    "Homework/Classwork": 100.0,
+    "Class Focus": 100.0,
+    "Exam": 10.9,
+    "Skills": 48.666666666666664
+  }
+}

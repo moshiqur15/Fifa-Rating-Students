@@ -1,0 +1,17 @@
+Student: Moshiqur
+Date: 2025-11-30 16:30:08.374431
+Overall Rating: 66.94/100
+
+======================================================================
+IMPROVEMENT PLAN
+======================================================================
+
+Error generating improvement plan: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+
+Basic Recommendation: Submit homework & classwork on time; improve quality and consistency.
+
+======================================================================
+STRENGTHS ANALYSIS
+======================================================================
+
+Error generating strengths analysis: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}

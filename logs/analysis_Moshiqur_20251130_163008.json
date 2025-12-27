@@ -1,0 +1,30 @@
+{
+  "student_id": "Moshiqur",
+  "timestamp": "2025-11-30T16:30:08.374832",
+  "ratings": {
+    "overall_rating": 66.94,
+    "subcategories": {
+      "Attendance": 80.2,
+      "Homework": 12.0,
+      "Classwork": 45.0,
+      "Class Focus": 80.2,
+      "Exam": 90.1,
+      "Skills": {
+        "problem_solving": 89.0,
+        "communication": 78.0,
+        "discipline": 34.0
+      }
+    },
+    "timestamp": "2025-11-30T16:30:07.814681",
+    "student_id": "Moshiqur"
+  },
+  "weak_category": "Homework/Classwork",
+  "recommendation": "Submit homework & classwork on time; improve quality and consistency.",
+  "all_scores": {
+    "Attendance": 80.2,
+    "Homework/Classwork": 28.5,
+    "Class Focus": 80.2,
+    "Exam": 90.1,
+    "Skills": 67.0
+  }
+}
