@@ -58,13 +58,17 @@ python app.py
 ```
 📁 Project Root
 ├── app.py                        ⭐ Main launcher (run this!)
-├── webapp.py                     # Web application
-├── create_scoring_model_pkl.py   # Creates pickle model
+├── create_scoring_model_pkl.py   # Update scoring model
+├── create_prediction_model_pkl.py # Update prediction model
+├── create_improvement_model_pkl.py # Update improvement model
 ├── requirements_webapp.txt       # Dependencies
+├── SYSTEM_ARCHITECTURE.md        ⭐ Full system documentation
 │
 ├── 📁 models/
 │   ├── student_scoring_model.pkl ⭐ From notebook
-│   └── student_rating_model.pkl  # FIFA rating model
+│   ├── student_rating_model.pkl  # FIFA rating model
+│   ├── student_prediction_model.pkl # Prediction model
+│   └── student_improvement_model.pkl # Improvement model
 │
 ├── 📁 data/                      # Auto-scanned!
 │   ├── amin.csv                  # 23 records
@@ -74,6 +78,9 @@ python app.py
 ├── 📁 src/
 │   ├── csv_processor.py          # Uses pickle model
 │   ├── student_rating.py         # Rating engine
+│   ├── scoring_model.py          # Scoring logic
+│   ├── prediction_model.py       # Prediction ML
+│   ├── improvement_model.py      # Improvement AI
 │   ├── groq_client.py            # AI client
 │   └── data_input.py             # Utilities
 │
@@ -159,6 +166,31 @@ Without API: Keyword-based analysis (still great!)
 
 ---
 
+## 🔄 Updating Models After Notebook Edits
+
+When you edit the Jupyter notebooks to improve model logic:
+
+```powershell
+# 1. Edit your notebook (e.g., student_scoring_model.ipynb)
+# 2. Export changes to corresponding src/*.py file
+
+# 3. Update the pickle files:
+python create_scoring_model_pkl.py
+python create_prediction_model_pkl.py
+python create_improvement_model_pkl.py
+
+# 4. Restart the webapp
+python app.py
+```
+
+**Features:**
+- ✅ Automatically detects existing models
+- ✅ Creates timestamped backups before updating
+- ✅ Verifies new models load correctly
+- ✅ Shows version info and file sizes
+
+---
+
 ## 📊 Rating Tiers
 
 | Score | Tier | Stars |
@@ -202,6 +234,7 @@ streamlit run webapp.py --server.port 8502
 
 ## 📚 More Documentation
 
+- **SYSTEM_ARCHITECTURE.md** ⭐ - Complete system architecture & technical documentation
 - **WEBAPP_GUIDE.md** - Detailed features guide
 - **REPORT_CARD_GUIDE.md** - CSV format details  
 - **QUICK_REFERENCE.txt** - One-page cheat sheet
