@@ -234,6 +234,7 @@ streamlit run webapp.py --server.port 8502
 
 ## 📚 More Documentation
 
+- **FEATURES_SUMMARY.md** 🎉 - Complete features list & user guide (NEW!)
 - **SYSTEM_ARCHITECTURE.md** ⭐ - Complete system architecture & technical documentation
 - **WEBAPP_GUIDE.md** - Detailed features guide
 - **REPORT_CARD_GUIDE.md** - CSV format details  
